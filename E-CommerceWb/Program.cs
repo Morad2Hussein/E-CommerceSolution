@@ -4,12 +4,13 @@ using E_Commerce.Persistence.Data.DataSeed;
 using E_Commerce.Persistence.Data.DbContexts;
 using E_CommerceWb.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace E_CommerceWb
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -30,8 +31,8 @@ namespace E_CommerceWb
             var app = builder.Build();
             #region Data Seeding
             
-          app.MigrateDatabase();
-            app.SeedDatabase();
+         await app.MigrateDatabaseAsync();
+          await  app.SeedDatabaseAsync();
             #endregion
             #region Configure the HTTP request pipeline.
 
@@ -50,7 +51,7 @@ namespace E_CommerceWb
             app.MapControllers(); 
             #endregion
 
-            app.Run();
+           await app.RunAsync();
         }
     }
 }

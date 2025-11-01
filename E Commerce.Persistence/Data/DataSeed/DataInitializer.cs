@@ -7,6 +7,7 @@ using E_Commerce.Domain.Entities.Shared;
 using E_Commerce.Persistence.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace E_Commerce.Persistence.Data.DataSeed
 {
@@ -17,35 +18,35 @@ namespace E_Commerce.Persistence.Data.DataSeed
         {
             _dbContext = dbContext;
         }
-        public void Initialize()
+        public async Task InitializeAsync()
         {
             try
             {
                 #region   check if i have data in the database or not  in the Product - ProductTypes - ProductBrands 
 
 
-                var HasProduct = _dbContext.Products.Any();
+                var HasProduct =await _dbContext.Products.AnyAsync();
 
-                var HasProductBrand = _dbContext.ProductBrands.Any();
+                var HasProductBrand =await _dbContext.ProductBrands.AnyAsync();
 
-                var HasProductType = _dbContext.ProductTypes.Any();
+                var HasProductType =await  _dbContext.ProductTypes.AnyAsync();
 
                 if (HasProduct && HasProductBrand && HasProductType) return;
                 #endregion
                 #region i not have data
                 if (!HasProductBrand)
                 {
-                    SeedDataFromJson<ProductBrand, int>("brands.json", _dbContext.ProductBrands);
+                await    SeedDataFromJsonAsync<ProductBrand, int>("brands.json", _dbContext.ProductBrands);
                 }
                 if (!HasProductType)
                 {
-                    SeedDataFromJson<ProductType, int>("types.json", _dbContext.ProductTypes);
-                    _dbContext.SaveChanges();
+                   await SeedDataFromJsonAsync<ProductType, int>("types.json", _dbContext.ProductTypes);
+                   await _dbContext.SaveChangesAsync();
                 }
                 if (!HasProduct)
                 {
-                    SeedDataFromJson<Product, int>("products.json", _dbContext.Products);
-                    _dbContext.SaveChanges();
+                 await   SeedDataFromJsonAsync<Product, int>("products.json", _dbContext.Products);
+                 await   _dbContext.SaveChangesAsync();
                 }
                 #endregion
             }
@@ -62,7 +63,7 @@ namespace E_Commerce.Persistence.Data.DataSeed
         #region HelperMethods
         // I want to take two Parameters 
         // the first is the fileName the second is the DbSet
-        private void SeedDataFromJson<T, TKey>(string fileName, DbSet<T> dbset) where T : BaseEntity<TKey>
+        private async Task SeedDataFromJsonAsync<T, TKey>(string fileName, DbSet<T> dbset) where T : BaseEntity<TKey>
         {
             // check if the file is available or not
 
@@ -75,7 +76,7 @@ namespace E_Commerce.Persistence.Data.DataSeed
             {
                 // open stream 
                 using var dataStream = File.OpenRead(FilePath);
-                var data = JsonSerializer.Deserialize<List<T>>(dataStream, new JsonSerializerOptions()
+                var data =await JsonSerializer.DeserializeAsync<List<T>>(dataStream, new JsonSerializerOptions()
                 {
 
                     PropertyNameCaseInsensitive = true
@@ -84,7 +85,7 @@ namespace E_Commerce.Persistence.Data.DataSeed
                 // check if data is null or not 
                 if (data is not null)
                 {
-                    dbset.AddRange(data);
+                  await  dbset.AddRangeAsync(data);
                 }
             }
             catch (Exception ex)

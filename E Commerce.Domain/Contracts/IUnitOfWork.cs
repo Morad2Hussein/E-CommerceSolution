@@ -11,7 +11,7 @@ namespace E_Commerce.Domain.Contracts
     {
         // save change
         Task<int> SaveChangeAsync();
-        IGenericRepository<TEntity,TKey> GetRepository<TEntity,TKey>(TEntity entity)  where TEntity : BaseEntity<TKey>;
+        IGenericRepository<TEntity,TKey> GetRepository<TEntity,TKey>()  where TEntity : BaseEntity<TKey>;
         
     }
 }

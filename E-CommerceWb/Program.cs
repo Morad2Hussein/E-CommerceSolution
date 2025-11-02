@@ -4,6 +4,8 @@ using E_Commerce.Persistence.Data.DataSeed;
 using E_Commerce.Persistence.Data.DbContexts;
 using E_Commerce.Persistence.UnitOfWork;
 using E_Commerce.Services.MappingProfile;
+using E_Commerce.Services.ProdectServices;
+using E_Commerce.Services_Abstraction.Services;
 using E_CommerceWb.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -30,6 +32,7 @@ namespace E_CommerceWb
             builder.Services.AddScoped<IDataInitializer, DataInitializer>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(x => x.AddProfile<ProductProfile>());
+            builder.Services.AddScoped<IProductServices, ProductServices>(); 
             #endregion
 
             var app = builder.Build();

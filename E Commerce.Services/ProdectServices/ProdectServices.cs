@@ -8,11 +8,11 @@ using E_Commerce.Shared.DTOS.ProductDTO;
 
 namespace E_Commerce.Services.ProdectServices
 {
-    public class ProdectServices : IProductServices
+    public class ProductServices : IProductServices
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ProdectServices(IUnitOfWork unitOfWork , IMapper mapper) {
+        public ProductServices(IUnitOfWork unitOfWork , IMapper mapper) {
         
          _unitOfWork = unitOfWork;
             _mapper = mapper;

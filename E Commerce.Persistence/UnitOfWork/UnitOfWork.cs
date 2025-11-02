@@ -17,31 +17,34 @@ namespace E_Commerce.Persistence.UnitOfWork
 
         }
 
-        public IGenericRepository<TEntity, TKey> GetRepository<TEntity, TKey>(TEntity entity) where TEntity : BaseEntity<TKey>
+    
+        public IGenericRepository<TEntity, TKey> GetRepository<TEntity, TKey>()  where TEntity : BaseEntity<TKey>
         {
+            // check if the type avaible or not 
+            var entityType = typeof(TEntity);
             // create object from GenericRepository
             // select the type of entity
-            var EntityType = typeof(TEntity);
-            // check if the type avaible or not 
-            if (_repositories.TryGetValue(EntityType, out object? repositries))
-                return (IGenericRepository<TEntity, TKey>)repositries;
+
+            if (_repositories.TryGetValue(entityType, out object? repository))
+                return (IGenericRepository<TEntity, TKey>)repository;
             //Here, the code checks if there’s already a repository created for this entity type.
             //TryGetValue:
             //Returns true if the entity type exists in the _repositories dictionary.
             //If yes → returns that repository after casting it back to the correct type.
             //This avoids creating duplicate repositories for the same entity.
             var newRepo = new GenericRepository<TEntity, TKey>(_dbContext);
-            _repositories[EntityType] = newRepo;
-            return newRepo;
+            _repositories[entityType] = newRepo;
             // Stores the new repository instance in the dictionary.
             //So, if you call GetRepository for the same entity again, it will reuse this one.
+            return newRepo;
         }
 
-
-
-
-
-
         public async Task<int> SaveChangeAsync() => await _dbContext.SaveChangesAsync();
+
+
+
+
+
+
     }
 }

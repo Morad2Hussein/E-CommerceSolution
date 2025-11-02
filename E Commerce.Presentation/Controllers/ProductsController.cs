@@ -45,7 +45,7 @@ namespace E_Commerce.Presentation.Controllers
         #region Get All Product Brands
         [HttpGet("brands")]
         public async Task<ActionResult<IEnumerable<BrandDTO>>> GetAllProductBrands()
-        {
+        { 
             var ProductBrands =await _services.GetAllBrandAsync();
             return Ok(ProductBrands);
         }

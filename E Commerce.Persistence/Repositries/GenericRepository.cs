@@ -1,6 +1,7 @@
 ﻿using E_Commerce.Domain.Contracts;
 using E_Commerce.Domain.Entities.Shared;
 using E_Commerce.Persistence.Data.DbContexts;
+using E_Commerce.Persistence.Specifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_Commerce.Persistence.Repositries
@@ -29,5 +30,11 @@ namespace E_Commerce.Persistence.Repositries
         public void Remove(TEntity entity)=>  _dbContext.Set<TEntity>().Remove(entity);
 
         public void Update(TEntity entity)=> _dbContext.Set<TEntity>().Update(entity);
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TEntity, TKey> specifications)
+        {
+
+            return await SpecifiactionsEvaluater.CreateQurey(_dbContext.Set<TEntity>(), specifications).ToListAsync();
+        }
     }
 }

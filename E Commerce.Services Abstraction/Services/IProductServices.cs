@@ -1,5 +1,6 @@
 ﻿
 using E_Commerce.Shared.DTOS.ProductDTO;
+using E_Commerce.Shared.ProductQuery;
 
 namespace E_Commerce.Services_Abstraction.Services
 {
@@ -7,7 +8,7 @@ namespace E_Commerce.Services_Abstraction.Services
     {
         // Get All Products Return IEnumerable Of Products Data Which Will be {Id , Name, Description , PictureUrl , Price , ProductBrand, ProductType} 
 
-        Task<IEnumerable<ProductDTO>> GetAllProductAsync();
+        Task<PagiationResult<ProductDTO>> GetAllProductAsync(ProductQueryParams productQuery);
         //Get Product By Id Return Product Data Which Will be {Id , Name, Description , PictureUrl , Price , ProductBrand, ProductType}
 
         Task<ProductDTO> GetProductByIdAsync(int id);
@@ -15,6 +16,7 @@ namespace E_Commerce.Services_Abstraction.Services
         Task<IEnumerable<BrandDTO>> GetAllBrandAsync();
         //Get All Types Return IEnumerable Of Types Data Which Will be {Id , Name}
         Task<IEnumerable<TypeDTO>> GetTypeAsync();
+       
 
     }
 }

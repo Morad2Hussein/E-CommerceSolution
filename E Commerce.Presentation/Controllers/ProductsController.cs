@@ -1,5 +1,6 @@
 ﻿using E_Commerce.Services_Abstraction.Services;
 using E_Commerce.Shared.DTOS.ProductDTO;
+using E_Commerce.Shared.ProductQuery;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 namespace E_Commerce.Presentation.Controllers
@@ -15,11 +16,11 @@ namespace E_Commerce.Presentation.Controllers
         }
         #region Get All Product
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
+        public async Task<ActionResult<PagiationResult<IEnumerable<ProductDTO>>>> GetAllProducts([FromQuery]ProductQueryParams productQuery)
         //This is the return type of the method.
         {
 
-            var Products = await _services.GetAllProductAsync();
+            var Products = await _services.GetAllProductAsync(productQuery);
             return Ok(Products);
         }
 

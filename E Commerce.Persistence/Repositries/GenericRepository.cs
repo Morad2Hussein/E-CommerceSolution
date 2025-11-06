@@ -36,5 +36,17 @@ namespace E_Commerce.Persistence.Repositries
 
             return await SpecifiactionsEvaluater.CreateQurey(_dbContext.Set<TEntity>(), specifications).ToListAsync();
         }
+
+        public async Task<TEntity?> GetByIdAsync(ISpecifications<TEntity, TKey> specifications)
+        {
+            return await SpecifiactionsEvaluater.CreateQurey(_dbContext.Set<TEntity>(), specifications).FirstAsync();
+        }
+
+        public async Task<int> CountAsyn(ISpecifications<TEntity,TKey> specifications)
+        {
+            return await SpecifiactionsEvaluater.CreateQurey(_dbContext.Set<TEntity>(), specifications).CountAsync();
+        }
+
+        
     }
 }

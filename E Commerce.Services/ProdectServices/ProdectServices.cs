@@ -6,6 +6,7 @@ using E_Commerce.Domain.Entities.Product_Module;
 using E_Commerce.Services.Specifications;
 using E_Commerce.Services_Abstraction.Services;
 using E_Commerce.Shared.DTOS.ProductDTO;
+using E_Commerce.Shared.ProductQuery;
 
 namespace E_Commerce.Services.ProdectServices
 {
@@ -26,18 +27,21 @@ namespace E_Commerce.Services.ProdectServices
         } 
         #endregion
 
-        public async Task<IEnumerable<ProductDTO>> GetAllProductAsync()
+        public async Task<PagiationResult<ProductDTO>> GetAllProductAsync(ProductQueryParams productQuery)
         {
-            var Spec = new ProductBaseSpecifications();
+            var Spec = new ProductBaseSpecifications(productQuery);
             var Product = await _unitOfWork.GetRepository<Product, int>().GetAllAsync( Spec);
-            
-            return _mapper.Map<IEnumerable<ProductDTO>>(Product);
-
+           var DataToReturn = _mapper.Map<IEnumerable<ProductDTO>>(Product);
+            var CountDataToReturn = DataToReturn.Count();
+            var CountSpec = new ProductCountSpecificaion(productQuery);
+            var CountOfAllProducts =await _unitOfWork.GetRepository<Product, int>().CountAsyn(CountSpec);
+            return  new  PagiationResult<ProductDTO>(productQuery.PageIndex, CountDataToReturn, CountOfAllProducts, DataToReturn);
         }
 
         public async Task<ProductDTO> GetProductByIdAsync(int id)
         {
-               var Product =await  _unitOfWork.GetRepository<Product, int>().GetByIdAsync(id);
+            var Spec = new ProductBaseSpecifications(id);
+               var Product =await  _unitOfWork.GetRepository<Product, int>().GetByIdAsync(Spec);
             return _mapper.Map<ProductDTO>(Product);
         }
 

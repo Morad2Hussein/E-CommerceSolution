@@ -21,9 +21,25 @@ namespace E_Commerce.Persistence.Specifications
             var Query = StartPoint;
             if (specifications is not null)
             {
+                if (specifications.Criteria is not null )
+                {
+                    Query = Query.Where(specifications.Criteria);  
+                }
                 if (specifications.IncloudExpression is not null && specifications.IncloudExpression.Any())
                 {
                     Query = specifications.IncloudExpression.Aggregate( Query , (CurrentQuery, IncludeExp) => CurrentQuery.Include(navigationPropertyPath: IncludeExp));
+                }
+                if (specifications.OrderBy is not null )
+                {
+                    Query = Query.OrderBy(specifications.OrderBy);
+                }
+                if (specifications.OrderByDescending is not null )
+                {
+                    Query = Query.OrderBy(specifications.OrderByDescending);
+                }
+                if (specifications.IsPagination)
+                {
+                    Query = Query.Skip(specifications.Skip).Take(specifications.Take);
                 }
             }
 

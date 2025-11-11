@@ -15,13 +15,7 @@ namespace E_Commerce.Services.Specifications
         #endregion
         #region get all data 
         public ProductBaseSpecifications(ProductQueryParams productQuery) :
-                            base(
-                 p =>
-                                      (!productQuery.BrandId.HasValue || p.BrandId == productQuery.BrandId.Value) &&
-                                      (!productQuery.TypeId.HasValue || p.TypeId == productQuery.TypeId.Value) &&
-                                      (string.IsNullOrEmpty(productQuery.Search) ||
-                                       p.Name.Contains(productQuery.Search, StringComparison.OrdinalIgnoreCase))
-                                )
+         base( ProductSpecificationHelper.GetProductCriteria(productQuery))
 
         {
 
@@ -29,23 +23,23 @@ namespace E_Commerce.Services.Specifications
             AddInclude(p => p.ProductType);
             switch (productQuery.sort)
             {
-                case ProductSortingOptions.NameAcs :
+                case ProductSortingOptions.NameAcs:
                     AddOrderBy(p => p.Name);
                     break;
-                case ProductSortingOptions.NameDecs :
+                case ProductSortingOptions.NameDecs:
                     AddOrderByDescending(p => p.Name);
                     break;
-                case ProductSortingOptions.PriceAcs :
+                case ProductSortingOptions.PriceAcs:
                     AddOrderBy(p => p.Price);
                     break;
-                    case ProductSortingOptions.PriceDecs :
+                case ProductSortingOptions.PriceDecs:
                     AddOrderByDescending(p => p.Price);
                     break;
                 default:
                     AddOrderBy(p => p.Id);
                     break;
 
-                         
+
             }
             ApplyPaginations(productQuery.PageSize, productQuery.PageIndex);
         }

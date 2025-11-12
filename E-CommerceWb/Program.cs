@@ -2,13 +2,16 @@
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Persistence.Data.DataSeed;
 using E_Commerce.Persistence.Data.DbContexts;
+using E_Commerce.Persistence.Repositries;
 using E_Commerce.Persistence.UnitOfWork;
+using E_Commerce.Services.BasketServices;
 using E_Commerce.Services.MappingProfile;
 using E_Commerce.Services.ProdectServices;
 using E_Commerce.Services_Abstraction.Services;
 using E_CommerceWb.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using System.Threading.Tasks;
 
 namespace E_CommerceWb
@@ -36,6 +39,12 @@ namespace E_CommerceWb
             builder.Services.AddAutoMapper(typeof(ServicesAssemblyReference).Assembly);
             builder.Services.AddScoped<IProductServices, ProductServices>();
             builder.Services.AddTransient<ProductPictureURLResolver>();
+            builder.Services.AddSingleton<IConnectionMultiplexer>(Sp =>
+            {
+                return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnection")!);
+            });
+            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+            builder.Services.AddScoped<IBasketServices, BasketServices>();
             #endregion
 
             var app = builder.Build();

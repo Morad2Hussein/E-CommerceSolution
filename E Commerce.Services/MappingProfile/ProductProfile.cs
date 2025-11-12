@@ -9,7 +9,7 @@ namespace E_Commerce.Services.MappingProfile
     public class ProductProfile : Profile
     {
         public ProductProfile() {
-
+                
             CreateMap<ProductBrand, BrandDTO>();
             CreateMap<Product, ProductDTO>()
                    .ForMember(dest => dest.ProductType, opt => opt.MapFrom(scr => scr.ProductType.Name))

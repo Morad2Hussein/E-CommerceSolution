@@ -1,8 +1,8 @@
-﻿using E_Commerce.Services_Abstraction.Services;
+﻿using E_Commerce.Presentation.Attributes;
+using E_Commerce.Services_Abstraction.Services;
 using E_Commerce.Shared.DTOS.ProductDTO;
 using E_Commerce.Shared.ProductQuery;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 namespace E_Commerce.Presentation.Controllers
 {
     [ApiController]
@@ -16,6 +16,7 @@ namespace E_Commerce.Presentation.Controllers
         }
         #region Get All Product
         [HttpGet]
+        [RedisCache]
         public async Task<ActionResult<PagiationResult<IEnumerable<ProductDTO>>>> GetAllProducts([FromQuery]ProductQueryParams productQuery)
         //This is the return type of the method.
         {

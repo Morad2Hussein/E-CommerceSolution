@@ -5,6 +5,7 @@ using E_Commerce.Persistence.Data.DbContexts;
 using E_Commerce.Persistence.Repositries;
 using E_Commerce.Persistence.UnitOfWork;
 using E_Commerce.Services.BasketServices;
+using E_Commerce.Services.CacheServices;
 using E_Commerce.Services.MappingProfile;
 using E_Commerce.Services.ProdectServices;
 using E_Commerce.Services_Abstraction.Services;
@@ -45,6 +46,8 @@ namespace E_CommerceWb
             });
             builder.Services.AddScoped<IBasketRepository, BasketRepository>();
             builder.Services.AddScoped<IBasketServices, BasketServices>();
+            builder.Services.AddScoped<ICacheRepository, CacheRepository>();
+            builder.Services.AddScoped<ICacheServices, CacheServices>();
             #endregion
 
             var app = builder.Build();

@@ -9,6 +9,7 @@ using E_Commerce.Services.CacheServices;
 using E_Commerce.Services.MappingProfile;
 using E_Commerce.Services.ProdectServices;
 using E_Commerce.Services_Abstraction.Services;
+using E_CommerceWb.CustomMiddleware;
 using E_CommerceWb.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,7 +58,7 @@ namespace E_CommerceWb
           await  app.SeedDatabaseAsync();
             #endregion
             #region Configure the HTTP request pipeline.
-
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {

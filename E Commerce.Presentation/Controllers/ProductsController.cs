@@ -31,6 +31,7 @@ namespace E_Commerce.Presentation.Controllers
         public async Task<ActionResult<ProductDTO>> GetProductById(int id)
         {
             var Product =await _services.GetProductByIdAsync(id);
+
             return Ok(Product);
         }
 

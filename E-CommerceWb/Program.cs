@@ -11,6 +11,8 @@ using E_Commerce.Services.ProdectServices;
 using E_Commerce.Services_Abstraction.Services;
 using E_CommerceWb.CustomMiddleware;
 using E_CommerceWb.Extensions;
+using E_CommerceWb.Factories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
@@ -31,7 +33,8 @@ namespace E_CommerceWb
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<StoreDbContext>(optionsAction: options => {
+            builder.Services.AddDbContext<StoreDbContext>(optionsAction: options =>
+            {
 
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
@@ -49,13 +52,19 @@ namespace E_CommerceWb
             builder.Services.AddScoped<IBasketServices, BasketServices>();
             builder.Services.AddScoped<ICacheRepository, CacheRepository>();
             builder.Services.AddScoped<ICacheServices, CacheServices>();
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = ApiResponseFactory.ValidationResponse;
+            });
+
+
             #endregion
 
             var app = builder.Build();
             #region Data Seeding
-            
-         await app.MigrateDatabaseAsync();
-          await  app.SeedDatabaseAsync();
+
+            await app.MigrateDatabaseAsync();
+            await app.SeedDatabaseAsync();
             #endregion
             #region Configure the HTTP request pipeline.
             app.UseMiddleware<ExceptionHandlerMiddleware>();
@@ -71,10 +80,10 @@ namespace E_CommerceWb
             app.UseAuthorization();
 
 
-            app.MapControllers(); 
+            app.MapControllers();
             #endregion
 
-           await app.RunAsync();
+            await app.RunAsync();
         }
     }
 }

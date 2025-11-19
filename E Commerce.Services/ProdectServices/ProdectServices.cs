@@ -15,36 +15,37 @@ namespace E_Commerce.Services.ProdectServices
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ProductServices(IUnitOfWork unitOfWork , IMapper mapper) {
-        
-         _unitOfWork = unitOfWork;
+        public ProductServices(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         #region GetAll Brands
         public async Task<IEnumerable<BrandDTO>> GetAllBrandAsync()
         {
-            var Brands = await _unitOfWork.GetRepository<ProductBrand,int>().GetAllAsync();
-           return _mapper.Map<IEnumerable<BrandDTO>>(Brands);
-        } 
+            var Brands = await _unitOfWork.GetRepository<ProductBrand, int>().GetAllAsync();
+            return _mapper.Map<IEnumerable<BrandDTO>>(Brands);
+        }
         #endregion
 
         public async Task<PagiationResult<ProductDTO>> GetAllProductAsync(ProductQueryParams productQuery)
         {
             var Spec = new ProductBaseSpecifications(productQuery);
-            var Product = await _unitOfWork.GetRepository<Product, int>().GetAllAsync( Spec);
-           var DataToReturn = _mapper.Map<IEnumerable<ProductDTO>>(Product);
+            var Product = await _unitOfWork.GetRepository<Product, int>().GetAllAsync(Spec);
+            var DataToReturn = _mapper.Map<IEnumerable<ProductDTO>>(Product);
             var CountDataToReturn = DataToReturn.Count();
             var CountSpec = new ProductCountSpecificaion(productQuery);
-            var CountOfAllProducts =await _unitOfWork.GetRepository<Product, int>().CountAsyn(CountSpec);
-            return  new  PagiationResult<ProductDTO>(productQuery.PageIndex, CountDataToReturn, CountOfAllProducts, DataToReturn);
+            var CountOfAllProducts = await _unitOfWork.GetRepository<Product, int>().CountAsyn(CountSpec);
+            return new PagiationResult<ProductDTO>(productQuery.PageIndex, CountDataToReturn, CountOfAllProducts, DataToReturn);
         }
 
         public async Task<ProductDTO> GetProductByIdAsync(int id)
         {
             var Spec = new ProductBaseSpecifications(id);
-               var Product =await  _unitOfWork.GetRepository<Product, int>().GetByIdAsync(Spec);
-            if(Product is null) 
-                 throw new ProductNotFoundException(id);
+            var Product = await _unitOfWork.GetRepository<Product, int>().GetByIdAsync(Spec);
+            if (Product is null)
+                throw new ProductNotFoundException(id);
             return _mapper.Map<ProductDTO>(Product);
         }
 

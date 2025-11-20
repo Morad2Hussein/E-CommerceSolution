@@ -6,6 +6,7 @@ using E_Commerce.Domain.Entities.Product_Module;
 using E_Commerce.Services.Exceptions;
 using E_Commerce.Services.Specifications;
 using E_Commerce.Services_Abstraction.Services;
+using E_Commerce.Shared.ComonResults;
 using E_Commerce.Shared.DTOS.ProductDTO;
 using E_Commerce.Shared.ProductQuery;
 
@@ -40,13 +41,13 @@ namespace E_Commerce.Services.ProdectServices
             return new PagiationResult<ProductDTO>(productQuery.PageIndex, CountDataToReturn, CountOfAllProducts, DataToReturn);
         }
 
-        public async Task<ProductDTO> GetProductByIdAsync(int id)
+        public async Task<Results<ProductDTO>> GetProductByIdAsync(int id)
         {
             var Spec = new ProductBaseSpecifications(id);
             var Product = await _unitOfWork.GetRepository<Product, int>().GetByIdAsync(Spec);
             if (Product is null)
-                throw new ProductNotFoundException(id);
-            return _mapper.Map<ProductDTO>(Product);
+            return Errors.NotFound("Product.NotFound" , $" Product with Id {id} not found");
+            return  _mapper.Map<ProductDTO>(Product);
         }
 
         public async Task<IEnumerable<TypeDTO>> GetTypeAsync()

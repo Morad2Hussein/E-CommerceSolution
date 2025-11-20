@@ -5,9 +5,8 @@ using E_Commerce.Shared.ProductQuery;
 using Microsoft.AspNetCore.Mvc;
 namespace E_Commerce.Presentation.Controllers
 {
-    [ApiController]
-    [Route("api/[Controller]")]
-    public class ProductsController : ControllerBase
+    
+    public class ProductsController : ApiBaseController
     {
         private readonly IProductServices _services;
         public ProductsController(IProductServices services)
@@ -30,9 +29,9 @@ namespace E_Commerce.Presentation.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDTO>> GetProductById(int id)
         {
-            var Product =await _services.GetProductByIdAsync(id);
+            var Results =await _services.GetProductByIdAsync(id);
 
-            return Ok(Product);
+            return HandleResult<ProductDTO> (Results);
         }
 
 

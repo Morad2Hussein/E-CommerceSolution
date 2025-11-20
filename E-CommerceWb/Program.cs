@@ -14,9 +14,8 @@ using E_CommerceWb.Extensions;
 using E_CommerceWb.Factories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
-using System.Threading.Tasks;
+
 
 namespace E_CommerceWb
 {

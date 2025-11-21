@@ -27,6 +27,7 @@ namespace E_Commerce.Presentation.Controllers
         #endregion
 
         #region Register EndPoint
+        [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register (RegisterDTO registerDTO)
         {
             var Result = await _authenticationService.RegisterAsync(registerDTO);

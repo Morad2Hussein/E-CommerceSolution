@@ -2,6 +2,7 @@
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Persistence.Data.DataSeed;
 using E_Commerce.Persistence.Data.DbContexts;
+using E_Commerce.Persistence.IdentityData.DbContext;
 using E_Commerce.Persistence.Repositries;
 using E_Commerce.Persistence.UnitOfWork;
 using E_Commerce.Services.BasketServices;
@@ -55,7 +56,10 @@ namespace E_CommerceWb
             {
                 options.InvalidModelStateResponseFactory = ApiResponseFactory.ValidationResponse;
             });
-
+            builder.Services.AddDbContext<StoreIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+            });
 
             #endregion
 
@@ -63,6 +67,7 @@ namespace E_CommerceWb
             #region Data Seeding
 
             await app.MigrateDatabaseAsync();
+            await app.MigrateIdentityDatabaseAsync();
             await app.SeedDatabaseAsync();
             #endregion
             #region Configure the HTTP request pipeline.

@@ -1,5 +1,4 @@
-﻿
-using E_Commerce.Shared.ComonResults;
+﻿using E_Commerce.Shared.ComonResults;
 using E_Commerce.Shared.DTOS.UsersDtos;
 
 namespace E_Commerce.Services_Abstraction.Services
@@ -8,12 +7,14 @@ namespace E_Commerce.Services_Abstraction.Services
     {
         #region Login 
         // Email , Password  =|> return JWT Token = DisplayName , Email
-         Task<Results<UserDTO>> LoginAsync(LogInDTO logInDTO);
+        Task<Results<UserDTO>> LoginAsync(LogInDTO logInDTO);
         #endregion
 
         #region Register
         // Email , Password , UserName, PhoneNumber ,DisplayName =|> return Email , DisplayName , JWT Token
         Task<Results<UserDTO>> RegisterAsync(RegisterDTO registerDTO);
+        Task<bool> CheckEmailAsync(string email);
+        Task<Results<UserDTO>> GetUserByEmailAsync(string email);
 
 
         #endregion

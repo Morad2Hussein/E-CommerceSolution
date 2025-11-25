@@ -7,6 +7,7 @@ using E_Commerce.Persistence.IdentityData.DataSeed;
 using E_Commerce.Persistence.IdentityData.DbContext;
 using E_Commerce.Persistence.Repositries;
 using E_Commerce.Persistence.UnitOfWork;
+using E_Commerce.Services.AuthenticationServices;
 using E_Commerce.Services.BasketServices;
 using E_Commerce.Services.CacheServices;
 using E_Commerce.Services.MappingProfile;
@@ -15,10 +16,13 @@ using E_Commerce.Services_Abstraction.Services;
 using E_CommerceWb.CustomMiddleware;
 using E_CommerceWb.Extensions;
 using E_CommerceWb.Factories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
+using System.Text;
 
 
 namespace E_CommerceWb
@@ -67,6 +71,30 @@ namespace E_CommerceWb
             builder.Services.AddIdentityCore<ApplicationUser>()
                             .AddRoles<IdentityRole>()
                             .AddEntityFrameworkStores<StoreIdentityDbContext>();
+            builder.Services.AddScoped<IAuthenticationServices, AuthenticationServices>();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.SaveToken = true;
+                
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
+                    };
+                            });
+
+
             #endregion
 
             var app = builder.Build();
@@ -87,6 +115,7 @@ namespace E_CommerceWb
             }
             app.UseStaticFiles();
             app.UseHttpsRedirection();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

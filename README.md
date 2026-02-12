@@ -1,36 +1,56 @@
-E-Commerce API – .NET
-Onion Architecture • EF Core • AutoMapper • SQL Server • Redis • JWT • Swagger • Repository & Unit of Work
+# 🛒 E-Commerce Web API
+**High-Performance Backend | Onion Architecture | Redis Caching | JWT Security**
 
-The E-Commerce API is a fully structured, scalable, and maintainable backend solution built with ASP.NET Core Web API following the Onion Layer Architecture.
-The project implements Repository Pattern, Unit of Work Pattern, Entity Framework Core, AutoMapper, and integrates both SQL Server and Redis for optimized data handling.
 
-Authentication is managed using JWT Bearer Tokens, while API documentation is provided via Swagger (Swashbuckle).
-The system also uses Extensions Configuration to maintain a clean startup class and enhance project organization.
 
-🚀 Features
+A production-ready RESTful API built for modern e-commerce platforms. This project emphasizes **Architectural Purity** using Onion Architecture and focuses on high-speed data retrieval through distributed caching.
 
-✔️ ASP.NET Core Web API
+---
 
-✔️ Onion Layer Architecture (clean, testable & maintainable)
+## 🏛 Architectural Excellence: Onion Layering
 
-✔️ Entity Framework Core (EF Core)
+The system is engineered to be highly testable and independent of external frameworks:
+* **Core Layer:** Contains Domain Entities and Interfaces (The heart of the system).
+* **Application Layer:** Handles Business Logic, DTOs, and Mapping logic.
+* **Infrastructure Layer:** Manages external concerns like **SQL Server** and **Redis Caching**.
+* **Web API Layer:** The entry point, kept "thin" and clean using **Extensions Configuration** for service registrations.
 
-✔️ SQL Server database integration
+### 🧩 Advanced Patterns & Logic
+* **Distributed Caching:** Integrated **Redis** (via StackExchange.Redis) to drastically reduce latency for frequently accessed products and categories.
+* **Unit of Work & Repository:** Ensures that complex checkout or inventory operations are handled within a single, secure transaction.
+* **Stateless Security:** Implemented **JWT Bearer Authentication** for secure, scalable user sessions.
 
-✔️ Redis (Non-SQL) caching using StackExchange.Redis
+---
 
-✔️ AutoMapper for object mapping
+## 🛠️ Tech Stack & Performance Tools
 
-✔️ Repository Pattern for structured data access
+| Category | Technology |
+| :--- | :--- |
+| **Framework** | ASP.NET Core Web API |
+| **Primary Database** | Microsoft SQL Server |
+| **Caching Layer** | Redis (High-Performance NoSQL) |
+| **Security** | JWT (JSON Web Tokens) |
+| **Documentation** | Swagger / Swashbuckle |
+| **Mapping** | AutoMapper |
 
-✔️ Unit of Work Pattern for transaction management
+---
 
-✔️ JWT Bearer Authentication for secure API access
+## 🚀 Key Features
 
-✔️ Extensions Configuration to keep Program.cs clean
+- ⚡ **Redis Integration:** Optimized read performance for product catalogs.
+- 🔐 **Secure Access:** Identity management and protected endpoints using JWT.
+- 🛠 **Clean Startup:** Used **Service Extensions** to keep `Program.cs` readable and modular.
+- 📂 **AutoMapper Implementation:** Clean transformation between Domain Entities and API Response DTOs.
+- 📑 **Interactive API Docs:** Fully documented endpoints with Swagger for easy frontend integration.
+- 🔄 **Transaction Integrity:** Unit of Work pattern ensuring database consistency during orders.
 
-✔️ Swagger / Swashbuckle for interactive API documentation
+---
 
-✔️ Supports clean dependency injection
+## 📁 Project Structure (Onion Model)
 
-✔️ High performance & scalable
+```text
+ECommerce.API/
+├── 📂 Core.Domain           # Entities, Aggregates, Constants
+├── 📂 Core.Application      # Interfaces, Services, DTOs, Mapping Profiles
+├── 📂 Infrastructure.Data   # DbContext, Migrations, Repositories, Redis Implementation
+└── 📂 Web.API               # Controllers, Middlewares, Program Extensions
